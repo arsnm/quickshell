@@ -10,6 +10,7 @@
 #include "../core/logcat.hpp"
 #include "device.hpp"
 #include "enums.hpp"
+#include "networkd/backend.hpp"
 #include "nm/backend.hpp"
 
 namespace qs::network {
@@ -35,13 +36,48 @@ Networking::Networking(QObject* parent): QObject(parent) {
 		this->bindableConnectivity().setBinding([nm]() { return static_cast<NetworkConnectivity::Enum>(nm->connectivity()); });
 		// clang-format on
 
-		this->mBackend = nm;
+		this->mWiredBackend = nm;
+		this->mWifiBackend = nm;
 		this->mBackendType = NetworkBackendType::NetworkManager;
 		return;
 	} else {
 		delete nm;
 	}
-	qCCritical(logNetwork) << "Network will not work. Could not find an available backend.";
+
+	auto* networkd = new NetworkdBackend(this);
+	if (networkd->isAvailable()) {
+		// clang-format off
+		QObject::connect(networkd, &NetworkdBackend::deviceAdded, this, &Networking::deviceAdded);
+		QObject::connect(networkd, &NetworkdBackend::deviceRemoved, this, &Networking::deviceRemoved);
+		this->bindableConnectivity().setBinding([networkd]() { return networkd->connectivity(); });
+		// clang-format on
+
+		this->mWiredBackend = networkd;
+		this->mBackendType = NetworkBackendType::SystemdNetworkd;
+	} else {
+		delete networkd;
+	}
+
+	// auto* iwd = new IwdBackend(this);
+	// if (iwd->isAvailable()) {
+	// 	// clang-format off
+	// 	QObject::connect(iwd, &IwdBackend::deviceAdded, this, &Networking::deviceAdded);
+	// 	QObject::connect(iwd, &IwdBackend::deviceRemoved, this, &Networking::deviceRemoved);
+	// 	QObject::connect(this, &Networking::requestSetWifiEnabled, iwd, &IwdBackend::setWifiEnabled);
+	// 	this->bindableWifiEnabled().setBinding([iwd]() { return iwd->wifiEnabled(); });
+	// 	this->bindableWifiHardwareEnabled().setBinding([iwd]() { return iwd->wifiHardwareEnabled(); });
+	// 	// clang-format on
+
+	// 	this->mWifiBackend = iwd;
+	// 	if (this->mBackendType == NetworkBackendType::None) {
+	// 		this->mBackendType = NetworkBackendType::Iwd;
+	// 	}
+	// } else {
+	// 	delete iwd;
+	// }
+	if (!this->mWiredBackend && !this->mWifiBackend) {
+		qCCritical(logNetwork) << "Network will not work. Could not find an available backend.";
+	}
 }
 
 Networking* Networking::instance() {

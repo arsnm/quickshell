@@ -1,0 +1,12 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
+  "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node>
+  <interface name="org.freedesktop.network1.Link">
+    <property name="OperationalState" type="s" access="read"/>
+    <property name="CarrierState" type="s" access="read"/>
+    <property name="AddressState" type="s" access="read"/>
+    <property name="AdministrativeState" type="s" access="read"/>
+    <method name="Reconfigure"/>
+    <method name="Drop"/>
+  </interface>
+</node>

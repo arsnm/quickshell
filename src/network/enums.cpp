@@ -17,9 +17,11 @@ QString NetworkConnectivity::toString(NetworkConnectivity::Enum conn) {
 
 QString NetworkBackendType::toString(NetworkBackendType::Enum type) {
 	switch (type) {
-	case NetworkBackendType::None: return "None";
-	case NetworkBackendType::NetworkManager: return "NetworkManager";
-	default: return "Unknown";
+	case NetworkBackendType::None: return QStringLiteral("None");
+	case NetworkBackendType::NetworkManager: return QStringLiteral("NetworkManager");
+	case NetworkBackendType::SystemdNetworkd: return QStringLiteral("SystemdNetworkd");
+	case NetworkBackendType::Iwd: return QStringLiteral("Iwd");
+	default: return QStringLiteral("Unknown");
 	}
 }
 

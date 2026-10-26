@@ -12,7 +12,7 @@
 
 namespace qs::network {
 class NetworkDevice;
-}
+} // namespace qs::network
 
 namespace qs::network {
 

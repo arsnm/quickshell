@@ -62,7 +62,8 @@ private:
 	explicit Networking(QObject* parent = nullptr);
 
 	ObjectModel<NetworkDevice> mDevices {this};
-	NetworkBackend* mBackend = nullptr;
+	NetworkBackend* mWiredBackend = nullptr;
+	NetworkBackend* mWifiBackend = nullptr;
 	NetworkBackendType::Enum mBackendType = NetworkBackendType::None;
 	// clang-format off
 	Q_OBJECT_BINDABLE_PROPERTY(Networking, bool, bWifiEnabled, &Networking::wifiEnabledChanged);

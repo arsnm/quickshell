@@ -1,0 +1,16 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
+  "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node>
+  <interface name="org.freedesktop.network1.Manager">
+    <property name="OperationalState" type="s" access="read"/>
+    <property name="CarrierState" type="s" access="read"/>
+    <property name="AddressState" type="s" access="read"/>
+    <property name="IPv4AddressState" type="s" access="read"/>
+    <property name="IPv6AddressState" type="s" access="read"/>
+    <property name="OnlineState" type="s" access="read"/>
+    <method name="ListLinks">
+      <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="qs::network::NetworkdLinkList"/>
+      <arg name="links" type="a(iso)" direction="out"/>
+    </method>
+  </interface>
+</node>

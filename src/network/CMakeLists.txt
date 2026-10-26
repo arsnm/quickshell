@@ -1,4 +1,5 @@
 add_subdirectory(nm)
+add_subdirectory(networkd)
 
 qt_add_library(quickshell-network STATIC
 	network.cpp
@@ -21,7 +22,12 @@ qt_add_qml_module(quickshell-network
 
 qs_add_module_deps_light(quickshell-network quickshell-core)
 install_qml_module(quickshell-network)
-target_link_libraries(quickshell-network PRIVATE quickshell-network-nm Qt::Qml Qt::DBus)
+target_link_libraries(quickshell-network PRIVATE
+	quickshell-network-nm
+	quickshell-network-networkd
+	Qt::Qml
+	Qt::DBus
+)
 qs_add_link_dependencies(quickshell-network quickshell-dbus)
 target_link_libraries(quickshell PRIVATE quickshell-networkplugin)
 qs_module_pch(quickshell-network SET dbus)

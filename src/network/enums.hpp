@@ -40,6 +40,8 @@ public:
 	enum Enum : quint8 {
 		None = 0,
 		NetworkManager = 1,
+		SystemdNetworkd = 2,
+		Iwd = 3,
 	};
 	Q_ENUM(Enum);
 	Q_INVOKABLE static QString toString(qs::network::NetworkBackendType::Enum type);
